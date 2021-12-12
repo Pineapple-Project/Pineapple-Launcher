@@ -24,6 +24,11 @@ public class TopBar extends Panel {
     }
 
     @Override
+    public String getStylesheetPath() {
+        return null;
+    }
+
+    @Override
     public void init(PanelManager manager) {
         super.init(manager);
         this.topBar = this.layout;
