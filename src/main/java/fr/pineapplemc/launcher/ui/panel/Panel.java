@@ -9,10 +9,11 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
+import org.apache.logging.log4j.Logger;
 
 public abstract class Panel implements IPanel, IMovable, ITakePlace {
 
-    protected final ILogger logger;
+    protected final Logger logger;
     protected GridPane layout = new GridPane();
     protected PanelManager manager;
 

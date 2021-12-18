@@ -14,11 +14,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.logging.log4j.Logger;
 
 public class PanelManager {
 
     private final PineappleLauncher instance;
     private final Stage mainStage;
+
+    protected final Logger logger = PineappleLauncher.getInstance().getLogger();
 
     private GridPane layout;
 
@@ -66,6 +69,7 @@ public class PanelManager {
         GridPane.setHgrow(this.contentPane, Priority.ALWAYS);
 
         this.mainStage.show();
+        logger.info("Window initialized");
     }
 
     public void showPanel(IPanel panel) {
