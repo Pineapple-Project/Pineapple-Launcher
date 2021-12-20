@@ -14,7 +14,6 @@ public class PineappleLauncher extends Application {
 
     private PanelManager manager;
     private static PineappleLauncher instance;
-    //private final ILogger logger;
 
     private final Logger logger = LogManager.getLogger();
     private final File launcherDir = Utils.Helpers.generateGamePath("PineappleClient");

@@ -38,13 +38,13 @@ public class TopBar extends Panel {
         ImageView imageView = new ImageView();
         imageView.setImage(new Image("images/icon.png"));
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(25);
+        imageView.setFitHeight(30);
         setLeft(imageView);
         this.layout.getChildren().add(imageView);
 
         // Topbar center side
         Label title = new Label(Utils.Constants.LAUNCHER_TITLE);
-        title.setFont(Font.font("Consolas", FontWeight.BOLD, FontPosture.REGULAR, 18f));
+        title.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 18f));
         title.setStyle("-fx-text-fill: white;");
         setCenterH(title);
         this.layout.getChildren().add(title);
