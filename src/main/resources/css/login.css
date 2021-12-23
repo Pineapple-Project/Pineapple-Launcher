@@ -1,0 +1,52 @@
+.loginCard {
+    -fx-background-color: rgb(18, 18, 18);
+}
+
+.bottomLoginCard {
+    -fx-background-color: rgb(18, 18, 18);
+    -fx-opacity: 50%;
+}
+
+.noAccountLabel {
+    -fx-text-fill: #bcc6e7;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}
+
+.registerHereLabel {
+    -fx-text-fill: #69a7ed;
+    -fx-font-size: 14px;
+}
+
+.loginLabel {
+    -fx-text-fill: #fff;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 60px;
+}
+
+.background {
+    -fx-background-image: url('/images/loginBackground.png');
+    -fx-background-position: center center;
+    -fx-background-repeact: stretch;
+}
+
+.usernameField {
+    -fx-background-color: #1e1e1e;
+    -fx-font-size: 16px;
+    -fx-text-fill: #e5e5e5;
+}
+
+.passwordField {
+    -fx-background-color: #1e1e1e;
+    -fx-font-size: 16px;
+    -fx-text-fill: #e5e5e5;
+}
+
+.connectButton {
+    -fx-background-color: rgb(237, 165, 21);
+    -fx-border-radius: 0px;
+    -fx-background-insets: 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
