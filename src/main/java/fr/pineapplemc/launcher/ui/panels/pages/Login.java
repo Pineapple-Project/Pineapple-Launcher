@@ -1,5 +1,10 @@
 package fr.pineapplemc.launcher.ui.panels.pages;
 
+import fr.litarvan.openauth.AuthPoints;
+import fr.litarvan.openauth.AuthenticationException;
+import fr.litarvan.openauth.Authenticator;
+import fr.litarvan.openauth.model.AuthAgent;
+import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
 import fr.pineapplemc.launcher.ui.panel.Panel;
@@ -8,10 +13,9 @@ import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -29,6 +33,14 @@ public class Login extends Panel {
     private GridPane bottomLoginCard = new GridPane();
     private Saver saver = PineappleLauncher.getInstance().getSaver();
     private boolean isMojangLogin = true;
+
+    private TextField usernameField = new TextField();
+    private Label usernameErrorLabel = new Label();
+
+    private PasswordField passwordField = new PasswordField();
+    private Label passwordErrorLabel = new Label();
+
+    private Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
 
     @Override
     public String getName() {
@@ -181,9 +193,11 @@ public class Login extends Panel {
         usernameLabel.setStyle("-fx-text-fill: #95bad3; -fx-font-size: 14px;");
         usernameLabel.setTranslateX(37.5);
         usernameLabel.setTranslateY(120);
-
-        TextField usernameField = new TextField();
         usernameField.getStyleClass().add("usernameField");
+
+        usernameField.focusedProperty().addListener((_a, oldValue, newValue) -> {
+            if(!newValue) updateLoginButtonState(usernameField, usernameErrorLabel);
+        });
 
         GridPane.setVgrow(usernameField, Priority.ALWAYS);
         GridPane.setHgrow(usernameField, Priority.ALWAYS);
@@ -195,7 +209,6 @@ public class Login extends Panel {
         usernameField.setTranslateX(37.5);
         usernameField.setTranslateY(150);
 
-        Label usernameErrorLabel = new Label("Username Incorrect");
         GridPane.setVgrow(usernameErrorLabel, Priority.ALWAYS);
         GridPane.setHgrow(usernameErrorLabel, Priority.ALWAYS);
         setLeft(usernameErrorLabel);
@@ -217,7 +230,6 @@ public class Login extends Panel {
         passwordLabel.setTranslateX(37.5);
         passwordLabel.setTranslateY(240);
 
-        PasswordField passwordField = new PasswordField();
         passwordField.getStyleClass().add("passwordField");
 
         GridPane.setVgrow(passwordField, Priority.ALWAYS);
@@ -230,7 +242,10 @@ public class Login extends Panel {
         passwordField.setTranslateX(37.5);
         passwordField.setTranslateY(270);
 
-        Label passwordErrorLabel = new Label("Password Incorrect");
+        passwordField.focusedProperty().addListener((_a, oldValue, newValue) -> {
+            if(!newValue) updateLoginButtonState(passwordField, passwordErrorLabel);
+        });
+
         GridPane.setVgrow(passwordErrorLabel, Priority.ALWAYS);
         GridPane.setHgrow(passwordErrorLabel, Priority.ALWAYS);
         setLeft(passwordErrorLabel);
@@ -252,7 +267,6 @@ public class Login extends Panel {
         advertisementLabel.setTranslateY(280 + 30 + 50);
 
         // Login Button
-        Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
         GridPane.setVgrow(connectButton, Priority.ALWAYS);
         GridPane.setHgrow(connectButton, Priority.ALWAYS);
         setLeft(connectButton);
@@ -266,8 +280,50 @@ public class Login extends Panel {
 
         connectButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
+        connectButton.setOnMouseClicked(e -> {
+            if(isMojangLogin) {
+                authenticateMojang(usernameField.getText(), passwordField.getText());
+            }else {
+                authenticateMicrosoft(usernameField.getText(), passwordField.getText());
+            }
+        });
 
         // Login Card Register Section
         loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
+    }
+
+    public void updateLoginButtonState(TextField textField, Label errorLabel) {
+        if(textField.getText().length() == 0) {
+            errorLabel.setText("Please fill the field.");
+        }else {
+            errorLabel.setText("");
+        }
+
+        connectButton.setDisable(!(usernameField.getText().length() > 0 && passwordField.getText().length() > 0));
+    }
+
+    public void authenticateMojang(String user, String password) {
+        Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
+
+        try {
+            AuthResponse response = authenticator.authenticate(AuthAgent.MINECRAFT, user, password, null);
+
+            saver.set("accessToken", response.getAccessToken());
+            saver.set("clientToken", response.getClientToken());
+
+            PineappleLauncher.getInstance().setGameProfile(response.getSelectedProfile());
+            logger.info("Hello " + PineappleLauncher.getInstance().getGameProfile().getName());
+        } catch (AuthenticationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Authentication Error");
+            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
+            alert.setContentText(e.getMessage());
+            alert.show();
+            logger.warn(e.getMessage());
+        }
+    }
+
+    public void authenticateMicrosoft(String user, String password) {
+
     }
 }
