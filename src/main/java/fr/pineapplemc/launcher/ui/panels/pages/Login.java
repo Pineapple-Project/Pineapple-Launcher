@@ -3,7 +3,11 @@ package fr.pineapplemc.launcher.ui.panels.pages;
 import fr.litarvan.openauth.AuthPoints;
 import fr.litarvan.openauth.AuthenticationException;
 import fr.litarvan.openauth.Authenticator;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.model.AuthAgent;
+import fr.litarvan.openauth.model.AuthProfile;
 import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
@@ -17,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
@@ -42,6 +47,9 @@ public class Login extends Panel {
 
     private Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
 
+    private ImageView mojangIcon = new ImageView("images/mojangIcon.png");
+    private ImageView microsoftIcon = new ImageView("images/microsoftIcon.png");
+
     @Override
     public String getName() {
         return null;
@@ -55,6 +63,13 @@ public class Login extends Panel {
     @Override
     public void init(PanelManager manager) {
         super.init(manager);
+
+        // Icons Resize
+        mojangIcon.setFitWidth(20);
+        mojangIcon.setFitHeight(20);
+
+        microsoftIcon.setFitWidth(20);
+        microsoftIcon.setFitHeight(20);
 
         // Background Image
         GridPane background = new GridPane();
@@ -160,15 +175,6 @@ public class Login extends Panel {
             this.layout.getChildren().clear();
             init(manager);
         });
-
-        // Bottom Login Card Register Section
-        if(isMojangLogin) {
-            bottomLoginCard.getChildren().clear();
-            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMicrosoft);
-        }else {
-            bottomLoginCard.getChildren().clear();
-            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMojang);
-        }
 
         // Login Card
         GridPane.setVgrow(loginCard, Priority.ALWAYS);
@@ -277,6 +283,11 @@ public class Login extends Panel {
         connectButton.setMinWidth(325);
         connectButton.setMinHeight(50);
         connectButton.getStyleClass().add("connectButton");
+        if(isMojangLogin) {
+            connectButton.setGraphic(mojangIcon);
+        }else {
+            connectButton.setGraphic(microsoftIcon);
+        }
 
         connectButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
@@ -288,8 +299,19 @@ public class Login extends Panel {
             }
         });
 
-        // Login Card Register Section
-        loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
+        // Login Card And Bottom Login Card Register Section
+        if(isMojangLogin) {
+            bottomLoginCard.getChildren().clear();
+            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMicrosoft);
+            loginCard.getChildren().clear();
+            loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
+        }else {
+            bottomLoginCard.getChildren().clear();
+            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMojang);
+            loginCard.getChildren().clear();
+            loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
+        }
+
     }
 
     public void updateLoginButtonState(TextField textField, Label errorLabel) {
@@ -311,8 +333,8 @@ public class Login extends Panel {
             saver.set("accessToken", response.getAccessToken());
             saver.set("clientToken", response.getClientToken());
 
-            PineappleLauncher.getInstance().setGameProfile(response.getSelectedProfile());
-            logger.info("Hello " + PineappleLauncher.getInstance().getGameProfile().getName());
+            PineappleLauncher.getInstance().setMojangGameProfile(response.getSelectedProfile());
+            logger.info("Hello " + PineappleLauncher.getInstance().getMojangGameProfile().getName());
         } catch (AuthenticationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Authentication Error");
@@ -324,6 +346,22 @@ public class Login extends Panel {
     }
 
     public void authenticateMicrosoft(String user, String password) {
+        MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+        try {
+            MicrosoftAuthResult response = authenticator.loginWithCredentials(user, password);
 
+            saver.set("accessToken", response.getAccessToken());
+            saver.set("refreshToken", response.getRefreshToken());
+
+            PineappleLauncher.getInstance().setMicrosoftGameProfile(response.getProfile());
+            logger.info("Hello " + PineappleLauncher.getInstance().getMicrosoftGameProfile().getName());
+        } catch (MicrosoftAuthenticationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Authentication Error");
+            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
+            alert.setContentText(e.getMessage());
+            alert.show();
+            logger.warn(e.getMessage());
+        }
     }
 }

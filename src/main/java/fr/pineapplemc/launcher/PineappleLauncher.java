@@ -3,6 +3,11 @@ package fr.pineapplemc.launcher;
 import fr.litarvan.openauth.AuthPoints;
 import fr.litarvan.openauth.AuthenticationException;
 import fr.litarvan.openauth.Authenticator;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
+import fr.litarvan.openauth.microsoft.model.response.MicrosoftRefreshResponse;
+import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
 import fr.litarvan.openauth.model.AuthProfile;
 import fr.litarvan.openauth.model.response.RefreshResponse;
 import fr.pineapplemc.launcher.ui.PanelManager;
@@ -22,10 +27,11 @@ public class PineappleLauncher extends Application {
     private static PineappleLauncher instance;
 
     private final Logger logger = LogManager.getLogger();
-    private final File launcherDir = Utils.Helpers.generateGamePath("PineappleClient");
+    private final File launcherDir = Utils.Helpers.generateGamePath("Pineapple Client");
     private final Saver saver = new Saver(new File(launcherDir, "config.properties"));
 
-    private AuthProfile gameProfile = null;
+    private AuthProfile mojangGameProfile = null;
+    private MinecraftProfile microsoftGameProfile = null;
 
     public PineappleLauncher() {
         instance = this;
@@ -40,21 +46,23 @@ public class PineappleLauncher extends Application {
         this.manager = new PanelManager(this, stage);
         this.manager.init();
 
-        if(this.isUserAlreadyConnected()) {
-            logger.info("Hello " + gameProfile.getName());
+        if(this.isUserAlreadyConnectedWithMojang()) {
+            logger.info("Hello " + mojangGameProfile.getName());
+        }else if(this.isUserAlreadyConnectedWithMicrosoft()) {
+            logger.info("Hello " + microsoftGameProfile.getName());
         }else {
             this.manager.showPanel(new Login());
         }
     }
 
-    public boolean isUserAlreadyConnected() {
+    public boolean isUserAlreadyConnectedWithMojang() {
         if(saver.get("accessToken") != null && saver.get("clientToken") != null) {
             Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
             try {
                 RefreshResponse response = authenticator.refresh(saver.get("accessToken"), saver.get("clientToken"));
                 saver.set("accessToken", response.getAccessToken());
                 saver.set("clientToken", response.getClientToken());
-                this.gameProfile = response.getSelectedProfile();
+                this.mojangGameProfile = response.getSelectedProfile();
 
                 return true;
             }catch(AuthenticationException e) {
@@ -67,8 +75,31 @@ public class PineappleLauncher extends Application {
         return false;
     }
 
-    public void setGameProfile(AuthProfile gameProfile) {
-        this.gameProfile = gameProfile;
+    public boolean isUserAlreadyConnectedWithMicrosoft() {
+        if(saver.get("refreshToken") != null) {
+            MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+            try {
+                MicrosoftAuthResult response = authenticator.loginWithRefreshToken(saver.get("refreshToken"));
+                saver.set("accessToken", response.getAccessToken());
+                saver.set("refreshToken", response.getRefreshToken());
+                this.microsoftGameProfile = response.getProfile();
+
+                return true;
+            }catch(MicrosoftAuthenticationException e) {
+                saver.remove("accessToken");
+                saver.remove("refreshToken");
+                logger.warn(e.getMessage());
+            }
+        }
+
+        return false;
+    }
+
+    public void setMojangGameProfile(AuthProfile mojangGameProfile) {
+        this.mojangGameProfile = mojangGameProfile;
+    }
+    public void setMicrosoftGameProfile(MinecraftProfile microsoftGameProfile) {
+        this.microsoftGameProfile = microsoftGameProfile;
     }
 
     public Logger getLogger() {
@@ -80,7 +111,10 @@ public class PineappleLauncher extends Application {
     public Saver getSaver() {
         return saver;
     }
-    public AuthProfile getGameProfile() {
-        return gameProfile;
+    public AuthProfile getMojangGameProfile() {
+        return mojangGameProfile;
+    }
+    public MinecraftProfile getMicrosoftGameProfile() {
+        return microsoftGameProfile;
     }
 }

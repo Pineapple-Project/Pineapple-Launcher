@@ -61,7 +61,7 @@ public class TopBar extends Panel {
         FontAwesomeIconView closeIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_CLOSE);
         FontAwesomeIconView fullscreenIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_MAXIMIZE);
         FontAwesomeIconView minimizeIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_MINIMIZE);
-        setCanTakeAllWidth(closeIcon, fullscreenIcon, minimizeIcon);
+        setCanTakeAllHeight(closeIcon, fullscreenIcon, minimizeIcon);
 
         closeIcon.setFill(Color.WHITE);
         closeIcon.setOpacity(.7f);
