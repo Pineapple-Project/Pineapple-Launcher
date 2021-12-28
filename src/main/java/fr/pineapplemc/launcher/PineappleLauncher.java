@@ -26,7 +26,7 @@ public class PineappleLauncher extends Application {
     private PanelManager manager;
     private static PineappleLauncher instance;
 
-    private final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger(PineappleLauncher.class);
     private final File launcherDir = Utils.Helpers.generateGamePath("Pineapple Client");
     private final Saver saver = new Saver(new File(launcherDir, "config.properties"));
 
@@ -40,6 +40,8 @@ public class PineappleLauncher extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Thread.currentThread().setName("Pineapple Client Main Thread");
+
         logger.info("Java Version: " + System.getProperty("java.version"));
         logger.info("JavaFX version: " + System.getProperty("javafx.version"));
 

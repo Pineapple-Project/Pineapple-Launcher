@@ -2,13 +2,13 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-apply plugin: 'org.openjfx.javafxplugin'
-
 group 'fr.pineapplemc'
-version '1.0-SNAPSHOT'
+version "${version}"
+
+if(Boolean.parseBoolean("${snapshot}"))
+    version += "-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -18,25 +18,69 @@ repositories {
     }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
-
-    implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2'
-
-    implementation 'fr.flowarg:flowupdater:1.3.+'
-    implementation 'fr.flowarg:openlauncherlib:3.+'
-
-    implementation 'com.github.goxr3plus:FX-BorderlessScene:4+'
-
-    implementation 'org.apache.logging.log4j:log4j-api:2.17.0'
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.0'
+configurations {
+    export {
+        canBeResolved true
+        canBeConsumed false
+    }
+    implementation.extendsFrom(export)
 }
 
-javafx {
-    version = 12
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+def currentOS = System.getProperty("os.name")
+def platform = 'win'
+/*if(currentOS.equalsIgnoreCase("win")) {
+    platform = 'win'
+}else if(currentOS.equalsIgnoreCase("darwin")) {
+    platform = 'mac'
+}else if(currentOS.equalsIgnoreCase("linux")) {
+    platform = 'linux'
+}*/
+
+dependencies {
+    export fileTree(dir: 'libs', include: '*.jar')
+
+    export 'de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2'
+
+    export 'fr.flowarg:flowupdater:1.3.+'
+    export 'fr.flowarg:openlauncherlib:3.+'
+
+    export 'com.github.goxr3plus:FX-BorderlessScene:4+'
+
+    export 'org.apache.logging.log4j:log4j-api:2.17.0'
+    export 'org.apache.logging.log4j:log4j-core:2.17.0'
+
+    export "org.openjfx:javafx-base:12:${platform}"
+    export "org.openjfx:javafx-graphics:12:${platform}"
+    export "org.openjfx:javafx-controls:12:${platform}"
+    export "org.openjfx:javafx-fxml:12:${platform}"
+    export "org.openjfx:javafx-web:12:${platform}"
 }
 
 application {
     mainClassName = 'fr.pineapplemc.launcher.main.Main'
+}
+
+jar {
+    manifest {
+        attributes(["Main-Class": mainClassName])
+    }
+}
+
+task jarWithDependencies(type: org.gradle.jvm.tasks.Jar) {
+    classifier 'jdependencies'
+    group "build"
+    manifest {
+        attributes([
+                "Main-Class": mainClassName
+        ])
+    }
+
+    from { configurations.export.collect{it.isDirectory() ? it : zipTree(it)} } {
+        exclude "META-INF/*"
+        exclude "LICENSE.txt"
+        exclude "module-info.class"
+        exclude "META-INF/plexus/components.xml"
+    }
+
+    with jar
 }

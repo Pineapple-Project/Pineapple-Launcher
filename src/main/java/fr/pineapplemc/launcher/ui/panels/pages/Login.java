@@ -7,7 +7,6 @@ import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.model.AuthAgent;
-import fr.litarvan.openauth.model.AuthProfile;
 import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
