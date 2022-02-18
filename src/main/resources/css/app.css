@@ -2,3 +2,11 @@
     -fx-background-position: center center;
     -fx-background-repeact: stretch;
 }
+
+.launchButton {
+    -fx-background-color: rgb(237, 165, 21);
+    -fx-border-radius: 0px;
+    -fx-background-insets: 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}

@@ -293,9 +293,9 @@ public class Login extends Panel {
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         connectButton.setOnMouseClicked(e -> {
             if(isMojangLogin) {
-                authenticateMojang(usernameField.getText(), passwordField.getText());
+                PineappleLauncher.getInstance().getAuthManager().connectMojang(usernameField.getText(), passwordField.getText());
             }else {
-                authenticateMicrosoft(usernameField.getText(), passwordField.getText());
+                PineappleLauncher.getInstance().getAuthManager().connectMicrosoft(usernameField.getText(), passwordField.getText());
             }
         });
 
@@ -322,45 +322,5 @@ public class Login extends Panel {
         }
 
         connectButton.setDisable(!(usernameField.getText().length() > 0 && passwordField.getText().length() > 0));
-    }
-
-    public void authenticateMojang(String user, String password) {
-        Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
-
-        try {
-            AuthResponse response = authenticator.authenticate(AuthAgent.MINECRAFT, user, password, null);
-
-            saver.set("accessToken", response.getAccessToken());
-            saver.set("clientToken", response.getClientToken());
-
-            PineappleLauncher.getInstance().setMojangGameProfile(response.getSelectedProfile());
-            manager.showPanel(new Homepage());
-        } catch (AuthenticationException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Authentication Error");
-            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
-            alert.setContentText(e.getMessage());
-            alert.show();
-            logger.warn(e.getMessage());
-        }
-    }
-
-    public void authenticateMicrosoft(String user, String password) {
-        MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
-        try {
-            MicrosoftAuthResult response = authenticator.loginWithCredentials(user, password);
-
-            saver.set("accessToken", response.getAccessToken());
-            saver.set("refreshToken", response.getRefreshToken());
-
-            PineappleLauncher.getInstance().setMicrosoftGameProfile(response.getProfile());
-        } catch (MicrosoftAuthenticationException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Authentication Error");
-            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
-            alert.setContentText(e.getMessage());
-            alert.show();
-            logger.warn(e.getMessage());
-        }
     }
 }

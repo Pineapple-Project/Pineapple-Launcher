@@ -64,8 +64,7 @@ public class Utils {
         public static String LOGIN_CONNECTWITHMOJANG_LABEL = "Connect with Mojang ?";
         public static String LOGIN_ADVERTISEMENT_LABEL = "Pineapple Project is not affiliated with Mojang AB or Microsoft.";
 
-        public static String HOMEPAGE_GAMECARDTITLE_LABEL = "Launch the Game";
-        public static String HOMEPAGE_GAMEVERSION_LABEL = "Game Version: ";
+        public static String HOMEPAGE_GAMESETTINGS_LABEL = "Game Settings";
         public static String HOMEPAGE_LAUNCHBUTTON_LABEL = "Launch";
     }
 }

@@ -7,13 +7,16 @@ import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
+import fr.litarvan.openauth.model.AuthAgent;
 import fr.litarvan.openauth.model.AuthProfile;
+import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.litarvan.openauth.model.response.RefreshResponse;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
 import fr.pineapplemc.launcher.ui.panels.pages.Homepage;
 import fr.pineapplemc.launcher.ui.panels.pages.Login;
 import fr.theshark34.openlauncherlib.util.Saver;
+import javafx.scene.control.Alert;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -40,6 +43,52 @@ public class AuthenticationManager {
         this.microsoftProfile = microsoftProfile;
     }
 
+    public void connectMojang(String user, String password) {
+        Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
+
+        try {
+            AuthResponse response = authenticator.authenticate(AuthAgent.MINECRAFT, user, password, null);
+
+            saver.set("accessToken", response.getAccessToken());
+            saver.set("clientToken", response.getClientToken());
+
+            PineappleLauncher.getInstance().setMojangGameProfile(response.getSelectedProfile());
+            panelManager.showPanel(new Homepage());
+            logger.info("User Logged !");
+        }catch (AuthenticationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Authentication Error");
+            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
+            alert.setContentText(e.getMessage());
+            alert.show();
+
+            logger.warn(e.getMessage());
+        }
+    }
+
+    public void connectMicrosoft(String user, String password) {
+        MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
+
+        try {
+            MicrosoftAuthResult response = authenticator.loginWithCredentials(user, password);
+
+            saver.set("accessToken", response.getAccessToken());
+            saver.set("refreshToken", response.getRefreshToken());
+
+            PineappleLauncher.getInstance().setMicrosoftGameProfile(response.getProfile());
+            panelManager.showPanel(new Homepage());
+            logger.info("User Logged !");
+        }catch (MicrosoftAuthenticationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Authentication Error");
+            alert.setHeaderText("An error was occurred during the authentication. Please try again later.");
+            alert.setContentText(e.getMessage());
+            alert.show();
+
+            logger.warn(e.getMessage());
+        }
+    }
+
     public void restoreSession() {
         if(saver.get("accessToken") != null && saver.get("clientToken") != null) {
             Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
@@ -47,7 +96,7 @@ public class AuthenticationManager {
                 RefreshResponse response = authenticator.refresh(saver.get("accessToken"), saver.get("clientToken"));
                 saver.set("accessToken", response.getAccessToken());
                 saver.set("clientToken", response.getClientToken());
-                this.mojangProfile = response.getSelectedProfile();
+                instance.setMojangGameProfile(response.getSelectedProfile());
 
                 this.panelManager.showPanel(new Homepage());
                 logger.info("User Session Restored !");
@@ -64,7 +113,7 @@ public class AuthenticationManager {
                 MicrosoftAuthResult response = authenticator.loginWithRefreshToken(saver.get("refreshToken"));
                 saver.set("refreshToken", response.getRefreshToken());
                 saver.set("accessToken", response.getAccessToken());
-                this.microsoftProfile = response.getProfile();
+                instance.setMicrosoftGameProfile(response.getProfile());
 
                 this.panelManager.showPanel(new Homepage());
                 logger.info("User Session Restored !");

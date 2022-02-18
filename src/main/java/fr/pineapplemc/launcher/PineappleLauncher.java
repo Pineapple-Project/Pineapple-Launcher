@@ -1,18 +1,9 @@
 package fr.pineapplemc.launcher;
 
-import fr.litarvan.openauth.AuthPoints;
-import fr.litarvan.openauth.AuthenticationException;
-import fr.litarvan.openauth.Authenticator;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
 import fr.litarvan.openauth.model.AuthProfile;
-import fr.litarvan.openauth.model.response.RefreshResponse;
 import fr.pineapplemc.launcher.auth.AuthenticationManager;
 import fr.pineapplemc.launcher.ui.PanelManager;
-import fr.pineapplemc.launcher.ui.panels.pages.Homepage;
-import fr.pineapplemc.launcher.ui.panels.pages.Login;
 import fr.pineapplemc.launcher.utils.Utils;
 import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.application.Application;

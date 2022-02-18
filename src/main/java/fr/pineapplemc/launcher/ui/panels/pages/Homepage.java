@@ -11,6 +11,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -113,6 +115,38 @@ public class Homepage extends Panel {
         Tooltip.install(disconnectButton, disconnectButtonHoverText);
 
         topGameCard.getChildren().add(disconnectButton);
+
+        // Game Settings Label
+        Label gameSettingsLabel = new Label(Utils.Constants.HOMEPAGE_GAMESETTINGS_LABEL);
+
+        GridPane.setVgrow(gameSettingsLabel, Priority.ALWAYS);
+        GridPane.setHgrow(gameSettingsLabel, Priority.ALWAYS);
+        setCenterH(gameSettingsLabel);
+        setTop(gameSettingsLabel);
+
+        gameSettingsLabel.setPadding(new Insets(30, 0, 0, 0));
+        gameSettingsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
+
+        gameCard.getChildren().add(gameSettingsLabel);
+
+        // Launch Game Button
+        Button launchButton = new Button(Utils.Constants.HOMEPAGE_LAUNCHBUTTON_LABEL);
+
+        GridPane.setVgrow(launchButton, Priority.ALWAYS);
+        GridPane.setHgrow(launchButton, Priority.ALWAYS);
+        setCenterH(launchButton);
+        setBottom(launchButton);
+
+        //launchButton.setPadding(new Insets(0, 0, 30, 0));
+        launchButton.setTranslateY(-30);
+        launchButton.setMinWidth(250);
+        launchButton.setMinHeight(45);
+        launchButton.getStyleClass().add("launchButton");
+
+        launchButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
+        launchButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
+
+        gameCard.getChildren().add(launchButton);
 
         // Game Card
         GridPane.setVgrow(gameCard, Priority.ALWAYS);
