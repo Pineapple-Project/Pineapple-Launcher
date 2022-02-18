@@ -23,7 +23,6 @@ public class PineappleLauncher extends Application {
     private final Saver saver = new Saver(new File(launcherDir, "config.properties"));
 
     private AuthenticationManager authManager;
-    private AuthProfile mojangGameProfile = null;
     private MinecraftProfile microsoftGameProfile = null;
 
     public PineappleLauncher() {
@@ -42,13 +41,10 @@ public class PineappleLauncher extends Application {
         this.manager = new PanelManager(this, stage);
         this.manager.init();
 
-        this.authManager = new AuthenticationManager(this.saver, this.launcherDir, this.logger, this.manager, instance, microsoftGameProfile, mojangGameProfile);
+        this.authManager = new AuthenticationManager(this.saver, this.launcherDir, this.logger, this.manager, instance, microsoftGameProfile);
         authManager.restoreSession();
     }
 
-    public void setMojangGameProfile(AuthProfile mojangGameProfile) {
-        this.mojangGameProfile = mojangGameProfile;
-    }
     public void setMicrosoftGameProfile(MinecraftProfile microsoftGameProfile) {
         this.microsoftGameProfile = microsoftGameProfile;
     }
@@ -61,9 +57,6 @@ public class PineappleLauncher extends Application {
     }
     public Saver getSaver() {
         return saver;
-    }
-    public AuthProfile getMojangGameProfile() {
-        return mojangGameProfile;
     }
     public MinecraftProfile getMicrosoftGameProfile() {
         return microsoftGameProfile;

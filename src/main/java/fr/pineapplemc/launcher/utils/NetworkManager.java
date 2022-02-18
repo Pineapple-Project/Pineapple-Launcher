@@ -1,11 +1,9 @@
 package fr.pineapplemc.launcher.utils;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 
 public class NetworkManager {
 

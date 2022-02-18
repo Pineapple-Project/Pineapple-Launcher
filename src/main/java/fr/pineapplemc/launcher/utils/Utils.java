@@ -61,8 +61,6 @@ public class Utils {
         public static String LOGIN_LABEL = "Pineapple Client - Login";
         public static String LOGIN_USERNAME_LABEL = "Username or E-mail";
         public static String LOGIN_PASSWORD_LABEL = "Password";
-        public static String LOGIN_CONNECTWITHMICROSOFT_LABEL = "Connect with Microsoft ?";
-        public static String LOGIN_CONNECTWITHMOJANG_LABEL = "Connect with Mojang ?";
         public static String LOGIN_ADVERTISEMENT_LABEL = "Pineapple Project is not affiliated with Mojang AB or Microsoft.";
 
         public static String HOMEPAGE_GAMESETTINGS_LABEL = "Game Settings";

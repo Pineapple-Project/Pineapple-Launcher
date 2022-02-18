@@ -75,7 +75,7 @@ public class Homepage extends Panel {
         topGameCard.setPadding(new Insets(0, 10, 0, 10));
 
         // Player Head Image
-        ImageView playerHeadImage = NetworkManager.getPlayerAvatar(PineappleLauncher.getInstance().getMojangGameProfile().getId());
+        ImageView playerHeadImage = NetworkManager.getPlayerAvatar(PineappleLauncher.getInstance().getMicrosoftGameProfile().getId());
 
         GridPane.setVgrow(playerHeadImage, Priority.ALWAYS);
         GridPane.setHgrow(playerHeadImage, Priority.ALWAYS);

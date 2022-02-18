@@ -36,7 +36,6 @@ public class Login extends Panel {
     private GridPane loginCard = new GridPane();
     private GridPane bottomLoginCard = new GridPane();
     private Saver saver = PineappleLauncher.getInstance().getSaver();
-    private boolean isMojangLogin = true;
 
     private TextField usernameField = new TextField();
     private Label usernameErrorLabel = new Label();
@@ -46,7 +45,6 @@ public class Login extends Panel {
 
     private Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
 
-    private ImageView mojangIcon = new ImageView("images/login/mojangIcon.png");
     private ImageView microsoftIcon = new ImageView("images/login/microsoftIcon.png");
 
     @Override
@@ -64,9 +62,6 @@ public class Login extends Panel {
         super.init(manager);
 
         // Icons Resize
-        mojangIcon.setFitWidth(20);
-        mojangIcon.setFitHeight(20);
-
         microsoftIcon.setFitWidth(20);
         microsoftIcon.setFitHeight(20);
 
@@ -132,48 +127,6 @@ public class Login extends Panel {
             }catch (IOException | URISyntaxException ex) {
                 this.logger.error(ex.getMessage());
             }
-        });
-
-        // Mojang Login Button
-        Label connectWithMojang = new Label(Utils.Constants.LOGIN_CONNECTWITHMOJANG_LABEL);
-        GridPane.setVgrow(connectWithMojang, Priority.ALWAYS);
-        GridPane.setHgrow(connectWithMojang, Priority.ALWAYS);
-        setTop(connectWithMojang);
-        setRight(connectWithMojang);
-
-        connectWithMojang.setStyle("-fx-text-fill: #69a7ed; -fx-font-size: 14px;");
-        connectWithMojang.setTranslateX(connectWithMojang.getWidth() - 10);
-        connectWithMojang.setTranslateY(5);
-        connectWithMojang.setUnderline(true);
-
-        connectWithMojang.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
-        connectWithMojang.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
-        connectWithMojang.setOnMouseClicked(e -> {
-            isMojangLogin = true;
-            this.loginContainer.getChildren().clear();
-            this.layout.getChildren().clear();
-            init(manager);
-        });
-
-        // Microsoft Login Button
-        Label connectWithMicrosoft = new Label(Utils.Constants.LOGIN_CONNECTWITHMICROSOFT_LABEL);
-        GridPane.setVgrow(connectWithMicrosoft, Priority.ALWAYS);
-        GridPane.setHgrow(connectWithMicrosoft, Priority.ALWAYS);
-        setTop(connectWithMicrosoft);
-        setRight(connectWithMicrosoft);
-
-        connectWithMicrosoft.setStyle("-fx-text-fill: #69a7ed; -fx-font-size: 14px;");
-        connectWithMicrosoft.setTranslateX(connectWithMicrosoft.getWidth() - 10);
-        connectWithMicrosoft.setTranslateY(5);
-        connectWithMicrosoft.setUnderline(true);
-
-        connectWithMicrosoft.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
-        connectWithMicrosoft.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
-        connectWithMicrosoft.setOnMouseClicked(e -> {
-            isMojangLogin = false;
-            this.loginContainer.getChildren().clear();
-            this.layout.getChildren().clear();
-            init(manager);
         });
 
         // Login Card
@@ -283,35 +236,14 @@ public class Login extends Panel {
         connectButton.setMinWidth(325);
         connectButton.setMinHeight(50);
         connectButton.getStyleClass().add("connectButton");
-        if(isMojangLogin) {
-            connectButton.setGraphic(mojangIcon);
-        }else {
-            connectButton.setGraphic(microsoftIcon);
-        }
+        connectButton.setGraphic(microsoftIcon);
+
 
         connectButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         connectButton.setOnMouseClicked(e -> {
-            if(isMojangLogin) {
-                PineappleLauncher.getInstance().getAuthManager().connectMojang(usernameField.getText(), passwordField.getText());
-            }else {
-                PineappleLauncher.getInstance().getAuthManager().connectMicrosoft(usernameField.getText(), passwordField.getText());
-            }
+            PineappleLauncher.getInstance().getAuthManager().connect(usernameField.getText(), passwordField.getText());
         });
-
-        // Login Card And Bottom Login Card Register Section
-        if(isMojangLogin) {
-            bottomLoginCard.getChildren().clear();
-            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMicrosoft);
-            loginCard.getChildren().clear();
-            loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
-        }else {
-            bottomLoginCard.getChildren().clear();
-            bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel, connectWithMojang);
-            loginCard.getChildren().clear();
-            loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
-        }
-
     }
 
     public void updateLoginButtonState(TextField textField, Label errorLabel) {
