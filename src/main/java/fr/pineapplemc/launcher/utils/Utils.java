@@ -1,6 +1,7 @@
 package fr.pineapplemc.launcher.utils;
 
 import fr.flowarg.flowcompat.Platform;
+import fr.pineapplemc.launcher.game.GameVersion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

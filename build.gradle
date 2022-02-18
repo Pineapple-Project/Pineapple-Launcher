@@ -26,15 +26,7 @@ configurations {
     implementation.extendsFrom(export)
 }
 
-def currentOS = System.getProperty("os.name")
 def platform = 'win'
-/*if(currentOS.equalsIgnoreCase("win")) {
-    platform = 'win'
-}else if(currentOS.equalsIgnoreCase("darwin")) {
-    platform = 'mac'
-}else if(currentOS.equalsIgnoreCase("linux")) {
-    platform = 'linux'
-}*/
 
 dependencies {
     export fileTree(dir: 'libs', include: '*.jar')

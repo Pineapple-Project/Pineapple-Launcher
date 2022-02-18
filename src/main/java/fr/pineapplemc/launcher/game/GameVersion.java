@@ -1,4 +1,4 @@
-package fr.pineapplemc.launcher.utils;
+package fr.pineapplemc.launcher.game;
 
 public class GameVersion {
 
