@@ -6,11 +6,12 @@ import fr.litarvan.openauth.Authenticator;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
-import fr.litarvan.openauth.microsoft.model.response.MicrosoftRefreshResponse;
 import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
 import fr.litarvan.openauth.model.AuthProfile;
 import fr.litarvan.openauth.model.response.RefreshResponse;
+import fr.pineapplemc.launcher.auth.AuthenticationManager;
 import fr.pineapplemc.launcher.ui.PanelManager;
+import fr.pineapplemc.launcher.ui.panels.pages.Homepage;
 import fr.pineapplemc.launcher.ui.panels.pages.Login;
 import fr.pineapplemc.launcher.utils.Utils;
 import fr.theshark34.openlauncherlib.util.Saver;
@@ -30,12 +31,14 @@ public class PineappleLauncher extends Application {
     private final File launcherDir = Utils.Helpers.generateGamePath("Pineapple Client");
     private final Saver saver = new Saver(new File(launcherDir, "config.properties"));
 
+    private AuthenticationManager authManager;
     private AuthProfile mojangGameProfile = null;
     private MinecraftProfile microsoftGameProfile = null;
 
     public PineappleLauncher() {
         instance = this;
         this.launcherDir.mkdirs();
+
     }
 
     @Override
@@ -48,10 +51,12 @@ public class PineappleLauncher extends Application {
         this.manager = new PanelManager(this, stage);
         this.manager.init();
 
+        this.authManager = new AuthenticationManager(this.saver, this.launcherDir, this.logger, this.manager, instance, microsoftGameProfile, mojangGameProfile);
+
         if(this.isUserAlreadyConnectedWithMojang()) {
-            logger.info("Hello " + mojangGameProfile.getName());
+            this.manager.showPanel(new Homepage());
         }else if(this.isUserAlreadyConnectedWithMicrosoft()) {
-            logger.info("Hello " + microsoftGameProfile.getName());
+            this.manager.showPanel(new Homepage());
         }else {
             this.manager.showPanel(new Login());
         }
@@ -118,5 +123,8 @@ public class PineappleLauncher extends Application {
     }
     public MinecraftProfile getMicrosoftGameProfile() {
         return microsoftGameProfile;
+    }
+    public AuthenticationManager getAuthManager() {
+        return authManager;
     }
 }

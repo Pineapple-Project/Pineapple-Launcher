@@ -26,7 +26,6 @@
 }
 
 .background {
-    -fx-background-image: url('/images/loginBackground.png');
     -fx-background-position: center center;
     -fx-background-repeact: stretch;
 }

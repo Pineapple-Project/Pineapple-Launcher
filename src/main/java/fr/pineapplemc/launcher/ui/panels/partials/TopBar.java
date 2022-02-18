@@ -43,7 +43,7 @@ public class TopBar extends Panel {
         this.layout.getChildren().add(imageView);
 
         // Topbar center side
-        Label title = new Label(Utils.Constants.LAUNCHER_TITLE);
+        Label title = new Label(Utils.Constants.LAUNCHER_NAME);
         title.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 18f));
         title.setStyle("-fx-text-fill: white;");
         setCenterH(title);
@@ -58,7 +58,7 @@ public class TopBar extends Panel {
         this.layout.getChildren().add(topbarButtons);
 
         // Topbar buttons config
-        FontAwesomeIconView closeIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_CLOSE);
+        FontAwesomeIconView closeIcon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
         FontAwesomeIconView fullscreenIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_MAXIMIZE);
         FontAwesomeIconView minimizeIcon = new FontAwesomeIconView(FontAwesomeIcon.WINDOW_MINIMIZE);
         setCanTakeAllHeight(closeIcon, fullscreenIcon, minimizeIcon);

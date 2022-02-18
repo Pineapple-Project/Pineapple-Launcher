@@ -46,8 +46,8 @@ public class Login extends Panel {
 
     private Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
 
-    private ImageView mojangIcon = new ImageView("images/mojangIcon.png");
-    private ImageView microsoftIcon = new ImageView("images/microsoftIcon.png");
+    private ImageView mojangIcon = new ImageView("images/login/mojangIcon.png");
+    private ImageView microsoftIcon = new ImageView("images/login/microsoftIcon.png");
 
     @Override
     public String getName() {
@@ -73,6 +73,7 @@ public class Login extends Panel {
         // Background Image
         GridPane background = new GridPane();
         setCanTakeAllSize(background);
+        background.setStyle("-fx-background-image: url('" + Utils.getCurrentDynamicBackground() + "');");
         background.getStyleClass().add("background");
         this.layout.add(background, 0, 0);
 
@@ -333,7 +334,7 @@ public class Login extends Panel {
             saver.set("clientToken", response.getClientToken());
 
             PineappleLauncher.getInstance().setMojangGameProfile(response.getSelectedProfile());
-            logger.info("Hello " + PineappleLauncher.getInstance().getMojangGameProfile().getName());
+            manager.showPanel(new Homepage());
         } catch (AuthenticationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Authentication Error");
@@ -353,7 +354,6 @@ public class Login extends Panel {
             saver.set("refreshToken", response.getRefreshToken());
 
             PineappleLauncher.getInstance().setMicrosoftGameProfile(response.getProfile());
-            logger.info("Hello " + PineappleLauncher.getInstance().getMicrosoftGameProfile().getName());
         } catch (MicrosoftAuthenticationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Authentication Error");
