@@ -52,54 +52,7 @@ public class PineappleLauncher extends Application {
         this.manager.init();
 
         this.authManager = new AuthenticationManager(this.saver, this.launcherDir, this.logger, this.manager, instance, microsoftGameProfile, mojangGameProfile);
-
-        if(this.isUserAlreadyConnectedWithMojang()) {
-            this.manager.showPanel(new Homepage());
-        }else if(this.isUserAlreadyConnectedWithMicrosoft()) {
-            this.manager.showPanel(new Homepage());
-        }else {
-            this.manager.showPanel(new Login());
-        }
-    }
-
-    public boolean isUserAlreadyConnectedWithMojang() {
-        if(saver.get("accessToken") != null && saver.get("clientToken") != null) {
-            Authenticator authenticator = new Authenticator(Authenticator.MOJANG_AUTH_URL, AuthPoints.NORMAL_AUTH_POINTS);
-            try {
-                RefreshResponse response = authenticator.refresh(saver.get("accessToken"), saver.get("clientToken"));
-                saver.set("accessToken", response.getAccessToken());
-                saver.set("clientToken", response.getClientToken());
-                this.mojangGameProfile = response.getSelectedProfile();
-
-                return true;
-            }catch(AuthenticationException e) {
-                saver.remove("accessToken");
-                saver.remove("clientToken");
-                logger.warn(e.getMessage());
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isUserAlreadyConnectedWithMicrosoft() {
-        if(saver.get("refreshToken") != null) {
-            MicrosoftAuthenticator authenticator = new MicrosoftAuthenticator();
-            try {
-                MicrosoftAuthResult response = authenticator.loginWithRefreshToken(saver.get("refreshToken"));
-                saver.set("accessToken", response.getAccessToken());
-                saver.set("refreshToken", response.getRefreshToken());
-                this.microsoftGameProfile = response.getProfile();
-
-                return true;
-            }catch(MicrosoftAuthenticationException e) {
-                saver.remove("accessToken");
-                saver.remove("refreshToken");
-                logger.warn(e.getMessage());
-            }
-        }
-
-        return false;
+        authManager.restoreSession();
     }
 
     public void setMojangGameProfile(AuthProfile mojangGameProfile) {
