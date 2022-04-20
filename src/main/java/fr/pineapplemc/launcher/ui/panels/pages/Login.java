@@ -1,18 +1,9 @@
 package fr.pineapplemc.launcher.ui.panels.pages;
 
-import fr.litarvan.openauth.AuthPoints;
-import fr.litarvan.openauth.AuthenticationException;
-import fr.litarvan.openauth.Authenticator;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthResult;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
-import fr.litarvan.openauth.model.AuthAgent;
-import fr.litarvan.openauth.model.response.AuthResponse;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
 import fr.pineapplemc.launcher.ui.panel.Panel;
 import fr.pineapplemc.launcher.utils.Utils;
-import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
@@ -32,20 +23,19 @@ import java.net.URISyntaxException;
 
 public class Login extends Panel {
 
-    private GridPane loginContainer = new GridPane();
-    private GridPane loginCard = new GridPane();
-    private GridPane bottomLoginCard = new GridPane();
-    private Saver saver = PineappleLauncher.getInstance().getSaver();
+    private final GridPane loginContainer = new GridPane();
+    private final GridPane loginCard = new GridPane();
+    private final GridPane bottomLoginCard = new GridPane();
 
-    private TextField usernameField = new TextField();
-    private Label usernameErrorLabel = new Label();
+    private final TextField usernameField = new TextField();
+    private final Label usernameErrorLabel = new Label();
 
-    private PasswordField passwordField = new PasswordField();
-    private Label passwordErrorLabel = new Label();
+    private final PasswordField passwordField = new PasswordField();
+    private final Label passwordErrorLabel = new Label();
 
-    private Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
+    private final Button connectButton = new Button(Utils.Constants.LOGIN_CONNECTBUTTON_LABEL);
 
-    private ImageView microsoftIcon = new ImageView("images/login/microsoftIcon.png");
+    private final ImageView microsoftIcon = new ImageView("images/login/microsoftIcon.png");
 
     @Override
     public String getName() {
@@ -102,7 +92,7 @@ public class Login extends Panel {
         GridPane.setVgrow(noAccount, Priority.ALWAYS);
         GridPane.setHgrow(noAccount, Priority.ALWAYS);
         setTop(noAccount);
-        setLeft(noAccount);
+        setCenterH(noAccount);
 
         noAccount.getStyleClass().add("noAccountLabel");
         noAccount.setTranslateX(10);
@@ -112,7 +102,7 @@ public class Login extends Panel {
         GridPane.setVgrow(registerHereLabel, Priority.ALWAYS);
         GridPane.setHgrow(registerHereLabel, Priority.ALWAYS);
         setBottom(registerHereLabel);
-        setLeft(registerHereLabel);
+        setCenterH(registerHereLabel);
 
         registerHereLabel.getStyleClass().add("registerHereLabel");
         registerHereLabel.setTranslateX(15);
@@ -241,9 +231,12 @@ public class Login extends Panel {
 
         connectButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
-        connectButton.setOnMouseClicked(e -> {
-            PineappleLauncher.getInstance().getAuthManager().connect(usernameField.getText(), passwordField.getText());
-        });
+        connectButton.setOnMouseClicked(e -> PineappleLauncher.getInstance().getAuthManager().connect(usernameField.getText(), passwordField.getText()));
+
+        bottomLoginCard.getChildren().clear();
+        bottomLoginCard.getChildren().addAll(noAccount, registerHereLabel);
+        loginCard.getChildren().clear();
+        loginCard.getChildren().addAll(loginLabel, usernameLabel, usernameField, usernameErrorLabel, passwordLabel, passwordField, passwordErrorLabel, advertisementLabel, connectButton);
     }
 
     public void updateLoginButtonState(TextField textField, Label errorLabel) {

@@ -1,11 +1,10 @@
 package fr.pineapplemc.launcher;
 
 import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
-import fr.litarvan.openauth.model.AuthProfile;
 import fr.pineapplemc.launcher.auth.AuthenticationManager;
 import fr.pineapplemc.launcher.ui.PanelManager;
+import fr.pineapplemc.launcher.utils.Saver;
 import fr.pineapplemc.launcher.utils.Utils;
-import fr.theshark34.openlauncherlib.util.Saver;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +19,7 @@ public class PineappleLauncher extends Application {
 
     private final Logger logger = LogManager.getLogger(PineappleLauncher.class);
     private final File launcherDir = Utils.Helpers.generateGamePath("Pineapple Client");
-    private final Saver saver = new Saver(new File(launcherDir, "config.properties"));
+    private final Saver saver = new Saver(new File(launcherDir, "config.properties").toPath());
 
     private AuthenticationManager authManager;
     private MinecraftProfile microsoftGameProfile = null;

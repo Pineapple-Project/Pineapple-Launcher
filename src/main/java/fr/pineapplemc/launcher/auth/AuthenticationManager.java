@@ -8,7 +8,7 @@ import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
 import fr.pineapplemc.launcher.ui.panels.pages.Homepage;
 import fr.pineapplemc.launcher.ui.panels.pages.Login;
-import fr.theshark34.openlauncherlib.util.Saver;
+import fr.pineapplemc.launcher.utils.Saver;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.Logger;
 

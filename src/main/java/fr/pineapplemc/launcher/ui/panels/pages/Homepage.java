@@ -14,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -73,27 +74,6 @@ public class Homepage extends Panel {
         GridPane.setHgrow(topGameCard, Priority.ALWAYS);
         topGameCard.setStyle("-fx-background-color: rgb(18, 18, 18); -fx-opacity: 50%;");
         topGameCard.setPadding(new Insets(0, 10, 0, 10));
-
-        // Player Head Image
-        ImageView playerHeadImage = NetworkManager.getPlayerAvatar(PineappleLauncher.getInstance().getMicrosoftGameProfile().getId());
-
-        GridPane.setVgrow(playerHeadImage, Priority.ALWAYS);
-        GridPane.setHgrow(playerHeadImage, Priority.ALWAYS);
-        setCenterV(playerHeadImage);
-        setRight(playerHeadImage);
-
-        playerHeadImage.setFitWidth(40);
-        playerHeadImage.setFitHeight(40);
-        playerHeadImage.setOpacity(.7f);
-
-        playerHeadImage.setOnMouseEntered(e -> { playerHeadImage.setOpacity(1f); this.layout.setCursor(Cursor.HAND); });
-        playerHeadImage.setOnMouseExited(e -> { playerHeadImage.setOpacity(.7f); this.layout.setCursor(Cursor.DEFAULT); });
-
-        Tooltip playerHeadHoverText = new Tooltip("Player Settings");
-        playerHeadHoverText.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
-        Tooltip.install(playerHeadImage, playerHeadHoverText);
-
-        topGameCard.getChildren().add(playerHeadImage);
 
         // Disconnect Button
         FontAwesomeIconView disconnectButton = new FontAwesomeIconView(FontAwesomeIcon.USER_TIMES);
