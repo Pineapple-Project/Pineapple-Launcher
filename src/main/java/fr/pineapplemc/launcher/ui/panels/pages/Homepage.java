@@ -5,16 +5,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import fr.pineapplemc.launcher.PineappleLauncher;
 import fr.pineapplemc.launcher.ui.PanelManager;
 import fr.pineapplemc.launcher.ui.panel.Panel;
-import fr.pineapplemc.launcher.utils.NetworkManager;
 import fr.pineapplemc.launcher.utils.Utils;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -96,6 +93,32 @@ public class Homepage extends Panel {
 
         topGameCard.getChildren().add(disconnectButton);
 
+        // Player Head ImageView
+        /*StackPane settingsPaneButton = new StackPane();
+        ImageView settingsButton = Utils.getPlayerHead(PineappleLauncher.getInstance().getMicrosoftGameProfile().getId());
+
+        GridPane.setVgrow(settingsPaneButton, Priority.ALWAYS);
+        GridPane.setHgrow(settingsPaneButton, Priority.ALWAYS);
+        setCenterH(settingsPaneButton);
+        setRight(settingsPaneButton);
+
+        settingsPaneButton.setMaxWidth(45);
+        settingsPaneButton.setMaxHeight(45);
+        settingsPaneButton.setOpacity(1f);
+
+        settingsButton.setFitWidth(35);
+        settingsButton.setFitHeight(35);
+
+        settingsPaneButton.setOnMouseEntered(e -> { settingsPaneButton.setOpacity(1f); this.layout.setCursor(Cursor.HAND); });
+        settingsPaneButton.setOnMouseExited(e -> { settingsPaneButton.setOpacity(.7f); this.layout.setCursor(Cursor.DEFAULT); });
+
+        Tooltip settingsButtonHoverText = new Tooltip("Settings");
+        settingsButton.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        Tooltip.install(settingsPaneButton, settingsButtonHoverText);
+
+        settingsPaneButton.getChildren().add(settingsButton);
+        topGameCard.getChildren().add(settingsPaneButton);*/
+
         // Game Settings Label
         Label gameSettingsLabel = new Label(Utils.Constants.HOMEPAGE_GAMESETTINGS_LABEL);
 
@@ -109,6 +132,49 @@ public class Homepage extends Panel {
 
         gameCard.getChildren().add(gameSettingsLabel);
 
+        // Version ComboBox
+        Label gameVersionLabel = new Label(Utils.Constants.HOMEPAGE_GAMEVERSION_LABEL);
+        ComboBox<String> versionComboBox = new ComboBox<String>(Utils.Constants.versions());
+
+        GridPane.setVgrow(gameVersionLabel, Priority.ALWAYS);
+        GridPane.setHgrow(gameVersionLabel, Priority.ALWAYS);
+
+        gameVersionLabel.setTranslateX(30);
+        gameVersionLabel.setTranslateY(-75);
+        gameVersionLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px;");
+
+        GridPane.setVgrow(versionComboBox, Priority.ALWAYS);
+        GridPane.setHgrow(versionComboBox, Priority.ALWAYS);
+
+        versionComboBox.setTranslateX(400 / 2);
+        versionComboBox.setTranslateY(-75);
+        versionComboBox.setMaxWidth(175);
+        versionComboBox.getStyleClass().add("version-box");
+
+        gameCard.getChildren().addAll(gameVersionLabel, versionComboBox);
+
+        // CheckBox Optifine Mod
+        CheckBox isOptifine = new CheckBox(Utils.Constants.HOMEPAGE_ISOPTIFINE_LABEL);
+
+        GridPane.setVgrow(isOptifine, Priority.ALWAYS);
+        GridPane.setHgrow(isOptifine, Priority.ALWAYS);
+
+        isOptifine.setTranslateX(30);
+        isOptifine.setTranslateY(75);
+        isOptifine.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+        // CheckBox ModLoader Included
+        CheckBox isModLoader = new CheckBox(Utils.Constants.HOMEPAGE_ISMODLOADER_LABEL);
+
+        GridPane.setVgrow(isModLoader, Priority.ALWAYS);
+        GridPane.setHgrow(isModLoader, Priority.ALWAYS);
+
+        isModLoader.setTranslateX(400 - 195);
+        isModLoader.setTranslateY(73.75);
+        isModLoader.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+        gameCard.getChildren().addAll(isOptifine, isModLoader);
+
         // Launch Game Button
         Button launchButton = new Button(Utils.Constants.HOMEPAGE_LAUNCHBUTTON_LABEL);
 
@@ -117,7 +183,6 @@ public class Homepage extends Panel {
         setCenterH(launchButton);
         setBottom(launchButton);
 
-        //launchButton.setPadding(new Insets(0, 0, 30, 0));
         launchButton.setTranslateY(-30);
         launchButton.setMinWidth(250);
         launchButton.setMinHeight(45);

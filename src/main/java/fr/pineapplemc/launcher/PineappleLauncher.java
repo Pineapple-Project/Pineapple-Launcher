@@ -3,6 +3,7 @@ package fr.pineapplemc.launcher;
 import fr.litarvan.openauth.microsoft.model.response.MinecraftProfile;
 import fr.pineapplemc.launcher.auth.AuthenticationManager;
 import fr.pineapplemc.launcher.ui.PanelManager;
+import fr.pineapplemc.launcher.ui.panels.pages.Homepage;
 import fr.pineapplemc.launcher.utils.Saver;
 import fr.pineapplemc.launcher.utils.Utils;
 import javafx.application.Application;
@@ -27,7 +28,6 @@ public class PineappleLauncher extends Application {
     public PineappleLauncher() {
         instance = this;
         this.launcherDir.mkdirs();
-
     }
 
     @Override

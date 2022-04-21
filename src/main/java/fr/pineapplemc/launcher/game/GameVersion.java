@@ -1,33 +1,17 @@
 package fr.pineapplemc.launcher.game;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class GameVersion {
 
-    private String version;
-    private String code;
+    private ArrayList versions;
 
-    public GameVersion(String version, String code) {
-        this.version = version;
-        this.code = code;
+    public ArrayList getVersions() {
+        return versions;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return this.version;
+    public void setVersions(ArrayList versions) {
+        this.versions = versions;
     }
 }

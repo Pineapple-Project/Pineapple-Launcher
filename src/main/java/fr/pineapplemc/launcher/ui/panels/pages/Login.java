@@ -228,7 +228,6 @@ public class Login extends Panel {
         connectButton.getStyleClass().add("connectButton");
         connectButton.setGraphic(microsoftIcon);
 
-
         connectButton.setOnMouseEntered(e -> this.layout.setCursor(Cursor.HAND));
         connectButton.setOnMouseExited(e -> this.layout.setCursor(Cursor.DEFAULT));
         connectButton.setOnMouseClicked(e -> PineappleLauncher.getInstance().getAuthManager().connect(usernameField.getText(), passwordField.getText()));
